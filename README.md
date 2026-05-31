@@ -42,7 +42,7 @@ The first invocation will offer to add the [unpins.cachix.org](https://unpins.ca
 
 ## Man pages
 
-`less.1`, `lesskey.1`, and `lessecho.1` are embedded in the `less` binary — read with `unpin man less`. The same set rides in the Windows `less.exe`.
+`less.1`, `lesskey.1`, and `lessecho.1` are embedded in the `less` binary — read with `unpin man less`.
 
 ## Manual download
 
