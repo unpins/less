@@ -9,6 +9,8 @@ Standalone build of [less](https://www.greenwoodsoftware.com/less/).
 
 Part of the [unpins](https://unpins.org) project — native single-binary builds with no third-party runtime dependencies.
 
+Ships `less` plus its companion tools `lesskey` and `lessecho`. The Windows build uses upstream's `Makefile.wng` (Win32 console API, no ncurses).
+
 ## Installation
 
 Install with [unpin](https://github.com/unpins/unpin):
@@ -37,6 +39,10 @@ nix run github:unpins/less
 ```
 
 The first invocation will offer to add the [unpins.cachix.org](https://unpins.cachix.org) substituter so most pulls come pre-built.
+
+## Man pages
+
+`less.1`, `lesskey.1`, and `lessecho.1` are embedded in the `less` binary — read with `unpin man less`. The same set rides in the Windows `less.exe`.
 
 ## Manual download
 
