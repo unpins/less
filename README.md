@@ -11,18 +11,18 @@ Part of the [unpins](https://unpins.org) project — native single-binary builds
 
 Ships `less` plus its companion tools `lesskey` and `lessecho`. The Windows build uses upstream's `Makefile.wng` (Win32 console API, no ncurses).
 
-## Installation
+## Usage
 
-Install with [unpin](https://github.com/unpins/unpin):
+Run the `less` program with [unpin](https://github.com/unpins/unpin):
 
 ```bash
-unpin less
+unpin less file.txt
 ```
 
-Or run without installing:
+To install it onto your PATH:
 
 ```bash
-unpin run less
+unpin install less
 ```
 
 ## Build locally
