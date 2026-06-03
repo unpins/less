@@ -9,7 +9,7 @@ Standalone build of [less](https://www.greenwoodsoftware.com/less/).
 
 Part of the [unpins](https://unpins.org) project — native single-binary builds with no third-party runtime dependencies.
 
-Ships `less` plus its companion tools `lesskey` and `lessecho`. The Windows build uses upstream's `Makefile.wng` (Win32 console API, no ncurses).
+Ships `less` plus its companion programs `lesskey` and `lessecho`. The Windows build uses upstream's `Makefile.wng` (Win32 console API, no ncurses).
 
 ## Usage
 
@@ -24,6 +24,8 @@ To install it onto your PATH:
 ```bash
 unpin install less
 ```
+
+`unpin install less` also creates the `lesskey` and `lessecho` commands.
 
 ## Build locally
 
