@@ -12,6 +12,18 @@
     unpins-lib.lib.mkStandaloneFlake {
       inherit self;
       name = "less";
+
+      # Build via the unpin-llvm engine + emit a bitcode multicall module.
+      engine = "unpin-llvm";
+      multicall = {
+        programs = [{ name = "less"; } { name = "lessecho"; } { name = "lesskey"; }];
+      };
+      # less links ncurses(libtinfo) for terminfo-driven screen control. The
+      # fallback-terminfo + store-path-leak fix is baked centrally for every
+      # engine-Linux ncurses (native-overlay/ncurses.nix), so pkgsStatic.ncurses
+      # is already the portable, mega-dedupable .a — no per-package override.
+      # (Windows uses Makefile.wng below, no ncurses.)
+      build = pkgs: pkgs.pkgsStatic.less;
       # less on mingw doesn't use ncurses. Upstream ships Makefile.wng which targets
       # the Win32 console API directly (defines.wn + -lshell32). Autotools' configure
       # detects -ltinfo/-lncursesw via AC_CHECK_LIB but every subsequent
