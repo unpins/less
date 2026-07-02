@@ -31,6 +31,13 @@ unpin install less
 
 `less.1`, `lesskey.1`, and `lessecho.1` are embedded in the `less` binary — read with `unpin man less`.
 
+## Build notes
+
+- **Windows** uses upstream's `Makefile.wng`, which targets the Win32 console API directly instead of ncurses; Linux and macOS use static builds.
+- **Terminfo.** On Linux/macOS less links ncurses (libtinfo) for screen control. A minimal fallback terminfo is embedded, so the pager still drives common terminals when no terminfo database is present on the host.
+- **Regex.** Built with PCRE2 (`less --version` reports `PCRE2 regular expressions`), so pattern search uses PCRE2 syntax.
+- **Tests.** less's `lesstest` suite lives in a separate upstream repository, not the release tarball, so there is no `make check` to run; `less --version` is the smoke floor.
+
 ## Build locally
 
 ```bash
