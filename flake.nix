@@ -12,6 +12,8 @@
     unpins-lib.lib.mkStandaloneFlake {
       inherit self;
       name = "less";
+      smoke = [ "--version" ];
+      smokePattern = "^less [0-9]+";
 
       # Build via the unpin-llvm engine + emit a bitcode multicall module.
       engine = "unpin-llvm";
