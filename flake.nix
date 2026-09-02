@@ -19,6 +19,17 @@
       engine = "unpin-llvm";
       multicall = {
         programs = [{ name = "less"; } { name = "lessecho"; } { name = "lesskey"; }];
+        # less bakes SYSDIR into the binary and looks for `<sysdir>/.sysless`
+        # (the system-wide lesskey) at startup. Autotools resolves SYSDIR to the
+        # base derivation's $out/bin, so the shipped binary carried
+        # `/nix/store/<base>/bin/.sysless` — a path that exists on no user's
+        # machine. Harmless at runtime (the lookup just fails, silently, as it
+        # does on any host without one) but it is a store path inside a binary
+        # whose whole claim is self-containment, and `nix-store --references`
+        # does NOT see it: the check that would catch it is a `strings` scan.
+        # Verified present in the released artifact (CI 32491411984, 2026-08-21)
+        # before this line.
+        removeReferences = [ "less-static" ];
       };
       # less links ncurses(libtinfo) for terminfo-driven screen control. The
       # fallback-terminfo + store-path-leak fix is baked centrally for every
