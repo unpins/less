@@ -36,7 +36,24 @@
       # engine-Linux ncurses (native-overlay/ncurses.nix), so pkgsStatic.ncurses
       # is already the portable, mega-dedupable .a — no per-package override.
       # (Windows uses Makefile.wng below, no ncurses.)
-      build = pkgs: pkgs.pkgsStatic.less;
+      build = pkgs:
+        let base = pkgs.pkgsStatic.less; in
+        base.overrideAttrs (_: {
+          # less's suite only runs against a binary built with -DLESSTEST, and
+          # upstream's `check` target gets there by `make clean; make LESSTEST=1`
+          # (Makefile.in:110). As a checkPhase that would hand installPhase the
+          # INSTRUMENTED binary to ship, so it runs after install instead: $out
+          # already holds the plain one and the rebuild only dirties a tree
+          # about to be discarded. What is exercised is therefore the same
+          # source, not the same binary — upstream leaves no other way.
+          doInstallCheck =
+            base.stdenv.buildPlatform.canExecute base.stdenv.hostPlatform;
+          installCheckTarget = "check";
+          # lesstest/runtest is `#!/usr/bin/env perl`; the sandbox has no
+          # /usr/bin/env, and perl is not otherwise in scope.
+          preInstallCheck = "patchShebangs lesstest";
+          nativeInstallCheckInputs = [ pkgs.buildPackages.perl ];
+        });
       # less on mingw doesn't use ncurses. Upstream ships Makefile.wng which targets
       # the Win32 console API directly (defines.wn + -lshell32). Autotools' configure
       # detects -ltinfo/-lncursesw via AC_CHECK_LIB but every subsequent
