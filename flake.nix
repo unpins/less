@@ -18,6 +18,10 @@
       # Build via the unpin-llvm engine + emit a bitcode multicall module.
       engine = "unpin-llvm";
       multicall = {
+        # The `.exe` on the engine too, not the nixpkgs mingw-gcc cross; with
+        # three programs that also gives Windows the same dispatcher the other
+        # platforms have, instead of three separate binaries.
+        windows = true;
         programs = [{ name = "less"; } { name = "lessecho"; } { name = "lesskey"; }];
         # less bakes SYSDIR into the binary and looks for `<sysdir>/.sysless`
         # (the system-wide lesskey) at startup. Autotools resolves SYSDIR to the
@@ -81,9 +85,16 @@
           makeFlags = [
             "-f" "Makefile.wng"
             "SHELL=sh"
-            "CC=${cross.stdenv.cc.targetPrefix}gcc"
             "REGEX_PACKAGE=regcomp-local"
           ];
+          # Makefile.wng hard-codes nothing about the compiler, so hand it the
+          # stdenv's own — spelled through makeFlagsArray because a `$CC` inside
+          # the makeFlags list is not expanded. On the engine that is the clang
+          # that emits bitcode; naming a gcc here would quietly build the .exe
+          # off the engine and leave the fold with nothing to fold.
+          preBuild = (old.preBuild or "") + ''
+            makeFlagsArray+=("CC=$CC")
+          '';
           installPhase = ''
             runHook preInstall
             mkdir -p $out/bin
