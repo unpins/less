@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [692-2] - 2026-09-26
+
 ### Added
 
 - `lesskey` and `lessecho` now work on Windows. They were built and then thrown
